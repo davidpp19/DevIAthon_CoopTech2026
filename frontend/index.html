@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoopTech — Predictor de Comportamiento de Pago | Coop. Tulcán</title>
+    <meta name="description"
+        content="Dashboard analítico con IA para predecir comportamiento de pago de socios de la Cooperativa de Ahorro y Crédito Tulcán">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- ─── Sidebar ─── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="logo.png" alt="Cooperativa Tulcán" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-title">CoopTech</span>
+                    <span class="logo-subtitle">Coop. Tulcán</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-view="dashboard" id="nav-dashboard">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-view="scoring" id="nav-scoring">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
+                    <path d="M21.18 8.04c-1.73-4.68-6.92-7.08-11.6-5.35" />
+                </svg>
+                <span>Scoring</span>
+            </a>
+            <a href="#" class="nav-item" data-view="segments" id="nav-segments">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10" />
+                    <path d="M2 12h20" />
+                </svg>
+                <span>Segmentos</span>
+            </a>
+            <a href="#" class="nav-item" data-view="alerts" id="nav-alerts">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <span>Alertas</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="system-status" id="system-status">
+                <div class="status-dot"></div>
+                <span>Sistema activo</span>
+            </div>
+            <div class="version-label" id="version-label">v1.0.0</div>
+        </div>
+    </aside>
+
+    <!-- ─── Main Content ─── -->
+    <main class="main-content" id="main-content">
+        <!-- ─── Header ─── -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p class="header-subtitle" id="page-subtitle">Vista general del sistema de predicción de pago</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-badge" id="models-badge">
+                    <span class="badge-dot"></span>
+                    <span id="models-count">0 modelos</span>
+                </div>
+                <button class="btn-icon" id="btn-refresh" aria-label="Actualizar datos" title="Actualizar datos">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ─── Dashboard View ─── -->
+        <section class="view active" id="view-dashboard">
+            <!-- KPI Cards -->
+            <div class="kpi-grid" id="kpi-grid">
+                <div class="kpi-card" id="kpi-socios">
+                    <div class="kpi-header">
+                        <div class="kpi-icon kpi-icon-blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                        </div>
+                        <span class="kpi-label">Total Socios</span>
+                    </div>
+                    <div class="kpi-value" id="kpi-total-socios">—</div>
+                    <div class="kpi-subtext">Socios evaluados</div>
+                </div>
+                <div class="kpi-card" id="kpi-mora">
+                    <div class="kpi-header">
+                        <div class="kpi-icon kpi-icon-red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                        </div>
+                        <span class="kpi-label">Tasa de Mora</span>
+                    </div>
+                    <div class="kpi-value" id="kpi-tasa-mora">—</div>
+                    <div class="kpi-subtext">Porcentaje global</div>
+                </div>
+                <div class="kpi-card" id="kpi-alertas">
+                    <div class="kpi-header">
+                        <div class="kpi-icon kpi-icon-amber">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg>
+                        </div>
+                        <span class="kpi-label">Alertas Desvío</span>
+                    </div>
+                    <div class="kpi-value" id="kpi-alertas-desvio">—</div>
+                    <div class="kpi-subtext">Socios con desvío detectado</div>
+                </div>
+                <div class="kpi-card" id="kpi-menores">
+                    <div class="kpi-header">
+                        <div class="kpi-icon kpi-icon-purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                        </div>
+                        <span class="kpi-label">Menores Detectados</span>
+                    </div>
+                    <div class="kpi-value" id="kpi-menores-detectados">—</div>
+                    <div class="kpi-subtext">Bloqueados automáticamente</div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-grid">
+                <div class="chart-card" id="chart-riesgo">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribución de Riesgo</h3>
+                        <span class="chart-badge">Mora</span>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="canvas-riesgo"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card" id="chart-alertas">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribución de Alertas</h3>
+                        <span class="chart-badge">Early Warning</span>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="canvas-alertas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="charts-grid">
+                <div class="chart-card chart-card-wide" id="chart-productos">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Riesgo por Producto Bancario</h3>
+                        <span class="chart-badge">Segmentos</span>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="canvas-productos"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card" id="chart-canales">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Canales de Cobranza</h3>
+                        <span class="chart-badge">Acción</span>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="canvas-canales"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Scoring View ─── -->
+        <section class="view" id="view-scoring">
+            <div class="scoring-layout">
+                <div class="scoring-form-card">
+                    <h2 class="form-title">Consultar Score de Socio</h2>
+                    <p class="form-subtitle">Ingrese el ID del socio para obtener su perfil de riesgo completo</p>
+                    <div class="form-group">
+                        <label for="input-cliente-id">ID del Socio (v_ah_cliente)</label>
+                        <div class="input-group">
+                            <input type="number" id="input-cliente-id" placeholder="Ej: 349" class="form-input">
+                            <button class="btn-primary" id="btn-score" type="button">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                                    height="18">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                                <span>Evaluar</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="scoring-loading hidden" id="scoring-loading">
+                        <div class="spinner"></div>
+                        <span>Evaluando socio...</span>
+                    </div>
+                </div>
+
+                <!-- Score Result -->
+                <div class="score-result hidden" id="score-result">
+                    <div class="score-header-card">
+                        <div class="score-gauge-container">
+                            <canvas id="canvas-gauge" width="200" height="200"></canvas>
+                            <div class="score-gauge-label">
+                                <span class="gauge-value" id="gauge-value">—</span>
+                                <span class="gauge-text">Riesgo</span>
+                            </div>
+                        </div>
+                        <div class="score-summary">
+                            <div class="score-row">
+                                <span class="score-label">Cliente ID</span>
+                                <span class="score-value" id="res-cliente-id">—</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-label">Riesgo Global</span>
+                                <span class="score-value score-value-risk" id="res-riesgo">—</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-label">Elegibilidad Crédito</span>
+                                <span class="score-value" id="res-elegibilidad">—</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-label">Canal Cobranza</span>
+                                <span class="score-value" id="res-canal">—</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="score-label">Día Pago Sugerido</span>
+                                <span class="score-value" id="res-dia-pago">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerts & Actions -->
+                    <div class="score-details-grid">
+                        <div class="detail-card">
+                            <h4 class="detail-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                                    height="18">
+                                    <path
+                                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                    <line x1="12" y1="9" x2="12" y2="13" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                Alertas Activas
+                            </h4>
+                            <ul class="detail-list" id="res-alertas-list"></ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4 class="detail-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                                    height="18">
+                                    <polyline points="9 11 12 14 22 4" />
+                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                                </svg>
+                                Acciones Priorizadas
+                            </h4>
+                            <ul class="detail-list" id="res-acciones-list"></ul>
+                        </div>
+                        <div class="detail-card">
+                            <h4 class="detail-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                                    height="18">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                                Bloqueos
+                            </h4>
+                            <ul class="detail-list" id="res-bloqueos-list"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Agent Breakdown -->
+                    <div class="agents-breakdown" id="agents-breakdown">
+                        <h3 class="breakdown-title">Detalle por Agente IA</h3>
+                        <div class="agents-grid" id="agents-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Segments View ─── -->
+        <section class="view" id="view-segments">
+            <div class="segments-grid">
+                <div class="chart-card chart-card-wide" id="chart-seg-productos">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Score de Riesgo por Producto</h3>
+                        <span class="chart-badge">Segmentos</span>
+                    </div>
+                    <div class="chart-body chart-body-tall">
+                        <canvas id="canvas-seg-productos"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="segments-table-card" id="segments-table-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Detalle de Segmentos por Producto</h3>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="segments-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Socios</th>
+                                <th>Tasa Mora %</th>
+                                <th>Score Riesgo</th>
+                                <th>Nivel</th>
+                            </tr>
+                        </thead>
+                        <tbody id="segments-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card" id="chart-clusters">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Clusters de Socios</h3>
+                        <span class="chart-badge">K-Means</span>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="canvas-clusters"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Alerts View ─── -->
+        <section class="view" id="view-alerts">
+            <div class="alerts-summary-grid" id="alerts-summary-grid">
+                <div class="alert-summary-card alert-green">
+                    <div class="alert-summary-value" id="alert-sin-riesgo">—</div>
+                    <div class="alert-summary-label">Sin Riesgo</div>
+                    <div class="alert-bar">
+                        <div class="alert-bar-fill" id="bar-sin-riesgo"></div>
+                    </div>
+                </div>
+                <div class="alert-summary-card alert-yellow">
+                    <div class="alert-summary-value" id="alert-30d">—</div>
+                    <div class="alert-summary-label">Mora 30 días</div>
+                    <div class="alert-bar">
+                        <div class="alert-bar-fill" id="bar-30d"></div>
+                    </div>
+                </div>
+                <div class="alert-summary-card alert-orange">
+                    <div class="alert-summary-value" id="alert-60d">—</div>
+                    <div class="alert-summary-label">Mora 60 días</div>
+                    <div class="alert-bar">
+                        <div class="alert-bar-fill" id="bar-60d"></div>
+                    </div>
+                </div>
+                <div class="alert-summary-card alert-red">
+                    <div class="alert-summary-value" id="alert-90d">—</div>
+                    <div class="alert-summary-label">Mora 90 días</div>
+                    <div class="alert-bar">
+                        <div class="alert-bar-fill" id="bar-90d"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card chart-card-wide">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribución de Riesgo Completa</h3>
+                        <span class="chart-badge">Detalle</span>
+                    </div>
+                    <div class="chart-body chart-body-tall">
+                        <canvas id="canvas-alertas-detail"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Alertas por Tipo</h3>
+                        <span class="chart-badge">Distribución</span>
+                    </div>
+                    <div class="chart-body chart-body-tall">
+                        <canvas id="canvas-alertas-tipo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ─── Overlay for mobile sidebar ─── -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

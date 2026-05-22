@@ -1,0 +1,24 @@
+# CoopTech — Predictor de Comportamiento de Pago
+# Cooperativa de Ahorro y Crédito Tulcán
+# DevIAthon 2026
+
+# ─── Backend (FastAPI) ───────────────────────────────────
+fastapi==0.136.1
+uvicorn==0.47.0
+starlette==1.0.1
+pydantic==2.13.4
+
+# ─── Data Science & Machine Learning ────────────────────
+numpy==2.4.6
+pandas==3.0.3
+scikit-learn==1.8.0
+scipy==1.17.1
+imbalanced-learn==0.14.1
+joblib==1.5.3
+
+# ─── HTTP Client (Supabase REST API) ────────────────────
+httpx==0.28.1
+
+# ─── Utilidades ──────────────────────────────────────────
+python-dateutil==2.9.0.post0
+python-dotenv==1.2.2

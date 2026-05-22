@@ -1,0 +1,34 @@
+# ─── Python ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ─── Entornos virtuales ─────────────────────────────────
+venv/
+env/
+.venv/
+
+# ─── Modelos entrenados (se regeneran) ──────────────────
+backend/models/*.joblib
+backend/models/*.pkl
+
+# ─── IDE & OS ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+.DS_Store
+
+# ─── Logs ────────────────────────────────────────────────
+*.log
+
+# ─── Variables de entorno ────────────────────────────────
+.env
+.env.local
